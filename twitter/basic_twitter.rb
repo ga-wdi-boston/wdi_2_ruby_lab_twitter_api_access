@@ -93,53 +93,5 @@ answer.downcase!
 end
 
 
-	
-
-# Recent Tweets, Friend List, User Details, Lists, Favorited Tweets
-
-
-
-# client.lists
-# client.favorites(user)
-# client.user.
-
-# client.sample do |tweet|
-#   puts tweet.text
-# end
-
-
-
-
-
-
-
-# client.user(username) do |tweet|
-#   puts tweet.text
-# end
-
-# client.friends.all
-
-# Twitter::User
-
-# friend list:
-# def friends_list(username)
-# 	friends = []
-# 	client.friends[:users].each do |friend|
-# 		friends << friend[:name]
-# 	end
-# 	return friends
-# end
-
-# puts friends_list(answer)
-
-
-
-# recent tweets: 
-# puts client.user_timeline(answer)
-
-
-# What would you like to see? 
-# Recent Tweets, Friend List, User Details, Lists, Favorited Tweets
-
 # client.update('Tweeting from Ruby #LearnedAtGA')
 # 
