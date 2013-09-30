@@ -31,30 +31,6 @@ def tweet_list(list, client)
 	return list
 end
 
-def return_favourites(client)
-	favourites = []
-	client.favourites.each do |tweet|
-		favourites << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
-	end
-	return favourites
-end
-
-def return_mentions(client)
-	mentions = []
-	client.mentions.each do |tweet|
-		mentions << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
-	end
-	return mentions
-end
-
-def return_feed(client)
-	tweets = []
-	client.home_timeline.each do |tweet| 
-	tweets << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
-	end
-	return tweets
-end
-
 puts "Welcome to @abbygezunt's Twitter page.  What would you like to see?"
 puts "[Read] Twitter Feed, [User] Details, [Recent] Tweets, [Friends] List, [Lists], [Mentions], [Fav]orited Tweets"
 answer = gets.chomp
