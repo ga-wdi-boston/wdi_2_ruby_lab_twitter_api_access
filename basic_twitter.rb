@@ -12,6 +12,11 @@ end
 
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
+# 1. Build a Twitter client
+# 2. Split into multiple files as appropriate
+# 3. Write classes or methods as appropriate
+# 4. Read chaper 4 Blocks & Iterators
+
 # binding.pry
 # puts "What is your Twitter handle?"
 # twitter_handle = gets.chomp
@@ -24,11 +29,12 @@ OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 # puts "6. Favorites"
 
 class TwitterClient
-  # attr_reader :recent_tweets, :friends, :followers,
-  #             :user_details, :lists, :favorites
-  # def initializer
+  attr_accessor :client
+  
+  def initialize(client)
+    @client = client
+  end
 
-  # end
   def interface
     puts "What is your Twitter handle?"
     twitter_handle = gets.chomp
@@ -53,6 +59,11 @@ class TwitterClient
   end
 
   def get_recent_tweets
+    recent_tweets = []
+    client.user_timeline.each do |tweet|
+      recent_tweets << tweet[:text]
+    end
+    recent_tweets
   end
 
   def get_friend_list
@@ -62,6 +73,7 @@ class TwitterClient
   end
 
   def get_user_details
+
   end
 
   def get_lists
@@ -70,5 +82,6 @@ class TwitterClient
   def get_favorites
   end
 end
-twitsy = TwitterClient.new
+twitsy = TwitterClient.new(client)
+twitsy.interface
 binding.pry
