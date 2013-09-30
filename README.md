@@ -19,3 +19,7 @@ And then display the information accordingly on screen.
 Use dotenv and a .gitignore to keep the user credentials out of version control (git).
 Use a Gemfile to manage gem dependencies.
 Use Pry to inspect tweets and other objects. 
+
+### Bonus: 
+
+Use the Twitter Gem V5's new streaming functionality to stream all mentions of this user in realtime to the screen. This will probably only work with more popular users like Justin Bieber. 
