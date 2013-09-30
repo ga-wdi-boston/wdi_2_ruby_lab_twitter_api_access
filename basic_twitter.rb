@@ -11,10 +11,9 @@ client = Twitter::REST::Client.new do |config|
   config.access_token_secret = ENV["ACCESS_SECRET"]
 end
 
-binding.pry
-
 puts "What username would you like to find information on?"
 
+# binding.pry
 username = gets.chomp.to_s
 
 puts "What would you like to see? (Options are recent_tweets, friends_list, user_details, lists, fav_tweets)"
@@ -22,14 +21,21 @@ puts "What would you like to see? (Options are recent_tweets, friends_list, user
 input = gets.chomp.to_s
 tweet_list = []
 lists_list = []
-if input == "recent tweets"
+if input == "recent_tweets"
    client.user_timeline(username).each do |tweet|
     puts tweet[:text]
   end
 elsif input == "friends_list"
-  puts client.friends(username)
+  client.friends(username).each do |friend|
+    puts friend[:name]
+  end
 elsif input == "user_details"
-  puts client.user(username)
+  puts "Name: #{client.user(username.to_s).name}"
+  puts "Description: #{client.user(username.to_s).description}"
+  puts "Location: #{client.user(username.to_s).location}"
+  puts "Friends Count: #{client.user(username.to_s).friends_count}"
+  puts "Follower Count: #{client.user(username.to_s).followers_count}"
+  puts "Tweets Count: #{client.user(username.to_s).tweets_count}"
 elsif input == "lists"
    client.lists(username).each do |list|
     puts list[:name]
