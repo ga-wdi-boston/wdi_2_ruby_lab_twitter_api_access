@@ -15,6 +15,11 @@ end
 
 binding.pry
 
+def other_user_info(name)
+	user = client.user(name)
+	puts "#{user.attrs[:name]} has #{user.attrs[:friends_count]} friends.  Their most recent status was: \n\"#{user.attrs[:status][:text]}\"."
+end
+
 def return_friends(client)
 	friends = []
 	client.friends.attrs[:users].each do |user|
@@ -31,8 +36,12 @@ def tweet_list(list, client)
 	return list
 end
 
+answer = ""
+
+while answer
+
 puts "Welcome to @abbygezunt's Twitter page.  What would you like to see?"
-puts "[Read] Twitter Feed, [User] Details, [Recent] Tweets, [Friends] List, [Lists], [Mentions], [Fav]orited Tweets"
+puts "[Read] Twitter Feed, [User] Details, [Recent] Tweets, [Friends] List, [Lists], [Mentions], [Fav]orited Tweets, Read About [Other] Users, [Quit]"
 answer = gets.chomp
 answer.downcase!
 
@@ -52,18 +61,24 @@ when 'mentions'
 when 'fav'
 	puts "Abby's favorites:"
 	puts tweet_list(favourites, client)
+when 'other'
+	puts "Which Twitter user would you like to read about?"
+	answer = gets.chomp
+	puts other_user_info(answer)
+when 'quit'
+	Process.exit
 else
-	puts "Input not recognized"
+	Process.exit
 end
 
 
+
+
+
+	
+
 # Recent Tweets, Friend List, User Details, Lists, Favorited Tweets
 
-# puts "Would you like to know about anyone else?  Type their username."
-# answer = gets.chomp
-# username = client.user(answer)
-
-# puts "#{username.attrs[:name]} has #{username.attrs[:friends_count]} friends.  Their most recent status was: \n\"#{username.attrs[:status][:text]}\"."
 
 
 # client.lists
