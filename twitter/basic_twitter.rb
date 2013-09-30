@@ -13,7 +13,7 @@ client = Twitter::REST::Client.new do |config|
 end
 
 
-binding.pry
+# binding.pry
 
 def other_user_info(name)
 	user = client.user(name)
@@ -28,51 +28,69 @@ def return_friends(client)
 	return friends
 end
 
-def tweet_list(list, client)
-	list = []
-	client.list.each do |tweet|
-		list << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
+
+def favorites(client)
+	arr = []
+	client.favourites.each do |tweet|
+		arr << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
 	end
-	return list
+	return arr
+end
+
+def mentions(client)
+	arr = []
+	client.mentions.each do |tweet|
+		arr << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
+	end
+	return arr
+end
+
+def read_feed(client)
+	arr = []
+	client.home_timeline.each do |tweet|
+		arr << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
+	end
+	return arr
 end
 
 answer = ""
 
 while answer
 
+puts
 puts "Welcome to @abbygezunt's Twitter page.  What would you like to see?"
 puts "[Read] Twitter Feed, [User] Details, [Recent] Tweets, [Friends] List, [Lists], [Mentions], [Fav]orited Tweets, Read About [Other] Users, [Quit]"
 answer = gets.chomp
 answer.downcase!
 
-case answer
-when 'read'
-	puts "Your friends' most recent tweets:"
-	puts tweet_list(home_timeline, client)
-when 'user'
-when 'recent'
-when 'friends'
-	puts "Abby's friends list:"
-	puts return_friends(client)
-when 'lists'
-when 'mentions'
-	puts "Tweets about Abby:"
-	puts tweet_list(mentions, client)
-when 'fav'
-	puts "Abby's favorites:"
-	puts tweet_list(favourites, client)
-when 'other'
-	puts "Which Twitter user would you like to read about?"
-	answer = gets.chomp
-	puts other_user_info(answer)
-when 'quit'
-	Process.exit
-else
-	Process.exit
+	case answer
+	when 'read'
+		puts "Your friends' most recent tweets:"
+		puts read_feed(client)
+	when 'user'
+	when 'recent'
+	when 'friends'
+		puts "Abby's friends list:"
+		puts return_friends(client)
+	when 'lists'
+	when 'mentions'
+		puts "Tweets about Abby:"
+		puts mentions(client)
+	when 'fav'
+		puts "Abby's favorites:"
+		puts favorites(client)
+	when 'other'
+		puts "Which Twitter user would you like to read about?"
+		answer = gets.chomp
+		puts other_user_info(answer)
+	when 'quit'
+		Process.exit
+	else
+		Process.exit
+	end
+
+
 end
-
-
-
 
 
 	
