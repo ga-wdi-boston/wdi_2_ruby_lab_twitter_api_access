@@ -70,6 +70,11 @@ class TwitterClient
   end
 
   def get_followers
+    followers = {}
+    client.followers.each do |follower|
+      followers[follower[:screen_name]] = follower[:name]
+    end
+    followers
   end
 
   def get_user_details
