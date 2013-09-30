@@ -13,7 +13,7 @@ client = Twitter::REST::Client.new do |config|
 end
 
 
-# binding.pry
+binding.pry
 
 def return_friends(client)
 	friends = []
@@ -21,6 +21,14 @@ def return_friends(client)
 		friends << user[:name]
 	end
 	return friends
+end
+
+def tweet_list(list, client)
+	list = []
+	client.list.each do |tweet|
+		list << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
+	end
+	return list
 end
 
 def return_favourites(client)
@@ -31,24 +39,46 @@ def return_favourites(client)
 	return favourites
 end
 
-puts "Welcome to @abbygezunt's Twitter page.  What would you like to see?"
-puts "[user] details, [recent] tweets, [friends] list, [lists], [fav]orited tweets"
-answer = gets.chomp
+def return_mentions(client)
+	mentions = []
+	client.mentions.each do |tweet|
+		mentions << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
+	end
+	return mentions
+end
 
-case answer 
+def return_feed(client)
+	tweets = []
+	client.home_timeline.each do |tweet| 
+	tweets << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
+	end
+	return tweets
+end
+
+puts "Welcome to @abbygezunt's Twitter page.  What would you like to see?"
+puts "[Read] Twitter Feed, [User] Details, [Recent] Tweets, [Friends] List, [Lists], [Mentions], [Fav]orited Tweets"
+answer = gets.chomp
+answer.downcase!
+
+case answer
+when 'read'
+	puts "Your friends' most recent tweets:"
+	puts tweet_list(home_timeline, client)
 when 'user'
 when 'recent'
 when 'friends'
 	puts "Abby's friends list:"
 	puts return_friends(client)
 when 'lists'
+when 'mentions'
+	puts "Tweets about Abby:"
+	puts tweet_list(mentions, client)
 when 'fav'
 	puts "Abby's favorites:"
-	puts return_favourites(client)
+	puts tweet_list(favourites, client)
 else
-	puts "#{client.attrs[:name]} has #{client.attrs[:friends_count]} friends.  Their most recent status was: \n\"#{client.attrs[:status][:text]}\"."
-end 
-	
+	puts "Input not recognized"
+end
 
 
 # Recent Tweets, Friend List, User Details, Lists, Favorited Tweets
