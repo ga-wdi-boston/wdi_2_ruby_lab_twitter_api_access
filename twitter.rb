@@ -52,12 +52,16 @@ puts "Do you want Recent Tweets, Following List, User Details or Lists?"
 response = gets.chomp
 
 # Response logic. 
-if respone == "Recent Tweets"
+if response == "Recent Tweets"
 	recent_tweets(handle, client)
-elsif respone == "Following List"
+elsif response == "Following List"
 	following_list(handle, client)
 elsif response == "User Details"
-	user_details(handle, client)
+	begin
+		user_details(handle, client)
+	rescue Twitter::Error::NotFound => err
+		puts "#{err} because the user doesn't exist or hasn't yet added details."
+	end
 elsif response == "Lists"
 	lists(handle, client)
 else
