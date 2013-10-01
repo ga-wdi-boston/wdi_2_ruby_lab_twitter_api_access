@@ -1,6 +1,7 @@
 require 'pry'
 require 'twitter'
 require 'dotenv'
+require 'class'
 
 Dotenv.load
 
@@ -11,13 +12,10 @@ client = Twitter::REST::Client.new do |config|
   config.access_token_secret = ENV["ACCESS_SECRET"]
 end
 
-puts "What user to lookup?"
-username = gets.chomp
-# client.user(username)
 binding.pry
 puts "What would you like to view? Enter a number:"
 puts "1 - Recent Tweets"
-puts "2 - Friend Count"
+puts "2 - Friends"
 puts "3 - User Details"
 puts "4 - # of Lists Subscribed To"
 puts "5 - # of Favorited Tweets"
@@ -27,60 +25,33 @@ input = gets.chomp
 
 case input
 when "1"
-	recent_tweets = []
- 		@client.user_timeline.each do |tweet|
-		recent_tweets << tweet.text
-			end  
-		end
+	recent_tweets
 
 when "2"
-	# friends = []
-
-	friends_array = []
-  	client.friends(username).take(5).each do |friend|
-  		friends_array << friend.name
-  		end
-  	friends_array.each do |friend| puts friend 
-  		end
-  		x = friends_array
-	# client.friends(username).take(20).each do |friend|
-	# 	friends << friend[:name]
-	# 	x = friends
+	list_friends
 
 when "3"
-	x = client.user(username).description
+	user_description
 
 when "4"
-	client.lists(username) do |list|
-		x = list.text
-	end
+	client_lists
 
 when "5"
-	# x = client.favorites(username).take(5)
-	favorites = []
-	client.favorites(username).take(5).each do |x|
-		favorites << x[:name] 
-		x = favorites
-		end
+	favorite_tweets
 
 when '6'
-	friends_list = []
-	@client.friends(username) do |friends|
-		friends_list << friends.text
-		x = friends_list
-	end
+	client.friendship(username, otheruser)
 
-when "7"
-	mentions = []
-	client.mentions(username) do |mention|
-		mentions << mention.text
-	x = mentions
-	end
+# when "7"
+# 	mentions = []
+# 	client.mentions(username) do |mention|
+#  		mentions << mention.text
+#  	x = mentions
+# 	puts x
+# 	end
 
 else
 	puts "Try again."
 
 end
-
-puts "Your answer is #{x}."
 
