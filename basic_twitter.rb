@@ -12,22 +12,6 @@ end
 
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
-# 1. Build a Twitter client
-# 2. Split into multiple files as appropriate
-# 3. Write classes or methods as appropriate
-# 4. Read chaper 4 Blocks & Iterators
-
-# binding.pry
-# puts "What is your Twitter handle?"
-# twitter_handle = gets.chomp
-# puts "What information would you like about #{twitter_handle}?"
-# puts "1. Recent Tweets"
-# puts "2. Friend List"
-# puts "3. Followers"
-# puts "4. User Details"
-# puts "5. Lists"
-# puts "6. Favorites"
-
 class TwitterClient
   attr_accessor :client, :username
   
@@ -36,41 +20,60 @@ class TwitterClient
     @username = username
   end
 
+  def get_name
+    @client.user(@username).name
+  end
+
   def get_recent_tweets
     recent_tweets = []
-    @client.user_timeline(@@twitter_handle).each do |tweet|
+    @client.user_timeline(@username).each do |tweet|
       recent_tweets << tweet[:text]
     end
     recent_tweets
   end
 
-  def get_friends
+  def get_following
+    following = {}
+    @client.following(@username).each do |followee|
+      following[followee[:screen_name]] = followee[:name]
+    end
+    following
   end
 
   def get_followers
     followers = {}
-    @client.followers(@@twitter_handle).each do |follower|
+    @client.followers(@username).each do |follower|
       followers[follower[:screen_name]] = follower[:name]
     end
     followers
   end
 
-  def get_user_details
-
+  def get_follower_count
+    @client.user(@username).followers_count
   end
 
   def get_retweets
     retweets = {}
+    @client.retweets(@username).each do |retweet|
+      retweets[retweet[:user][:screen_name]] = retweet[:text]
+    end
+    retweets
   end
 
   def get_favorites
     favorites = {}
-    @client.favorites(@@twitter_handle).each do |favorite|
+    @client.favorites(@username).each do |favorite|
       favorites[favorite[:user][:screen_name]] = favorite[:text]
     end
     favorites
   end
 end
-twitsy = TwitterClient.new(client)
-twitsy.interface
+twitsy = TwitterClient.new(client, 'TheAllBox')
+puts twitsy.get_name
+puts twitsy.get_recent_tweets
+puts twitsy.get_following
+puts twitsy.get_followers
+puts twitsy.get_follower_count
+#puts twitsy.get_retweets
+puts twitsy.get_favorites
 binding.pry
