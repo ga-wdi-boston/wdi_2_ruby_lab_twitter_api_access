@@ -52,7 +52,7 @@ class TwitterClient
     @client.user(@username).followers_count
   end
 
-  # Still looking for correct syntax
+  # Still looking for correct syntax — can this be done?
   def get_retweets
     retweets = {}
     @client.retweets(@username).each do |retweet|
@@ -69,12 +69,13 @@ class TwitterClient
     favorites
   end
 end
-twitsy = TwitterClient.new(client, 'TheAllBox')
-puts twitsy.get_name
-puts twitsy.get_recent_tweets
-puts twitsy.get_following
-puts twitsy.get_followers
-puts twitsy.get_follower_count
-#puts twitsy.get_retweets
-puts twitsy.get_favorites
+twitsy = TwitterClient.new(client, gets.chomp)
 binding.pry
+# puts twitsy.get_name
+# puts twitsy.get_recent_tweets
+# puts twitsy.get_following
+# puts twitsy.get_followers
+# puts twitsy.get_follower_count
+# #puts twitsy.get_retweets
+# puts twitsy.get_favorites
+# binding.pry
