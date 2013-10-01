@@ -13,7 +13,7 @@ client = Twitter::REST::Client.new do |config|
 end
 
 
-# binding.pry
+binding.pry
 
 def other_user_info(name)
 	user = client.user(name)
@@ -27,7 +27,6 @@ def return_friends(client)
 	end
 	return friends
 end
-
 
 def favorites(client)
 	arr = []
@@ -49,8 +48,13 @@ def read_feed(client)
 	arr = []
 	client.home_timeline.each do |tweet|
 		arr << "#{tweet.attrs[:user][:screen_name]}: #{tweet.attrs[:text]}"
+		arr << ""
 	end
 	return arr
+end
+
+def user_info(client)
+	"#{client.user.attrs[:screen_name]}: #{client.user.attrs[:description]}"
 end
 
 answer = ""
@@ -58,8 +62,8 @@ answer = ""
 while answer
 
 puts
-puts "Welcome to @abbygezunt's Twitter page.  What would you like to see?"
-puts "[Read] Twitter Feed, [User] Details, [Recent] Tweets, [Friends] List, [Lists], [Mentions], [Fav]orited Tweets, Read About [Other] Users, [Quit]"
+puts "Welcome to your Terminal Twitter page.  What would you like to see?"
+puts "[Read] Twitter Feed, [User] Details, [Status], [Friends] List, [Mentions], [Fav]orited Tweets, Read About [Other] Users, [Quit]"
 answer = gets.chomp
 answer.downcase!
 
@@ -68,19 +72,20 @@ answer.downcase!
 		puts "Your friends' most recent tweets:"
 		puts read_feed(client)
 	when 'user'
-	when 'recent'
+		puts user_info(client)
+	when 'status'
+		puts client.user.attrs[:status][:text]
 	when 'friends'
-		puts "Abby's friends list:"
+		puts "Your friends list:"
 		puts return_friends(client)
-	when 'lists'
 	when 'mentions'
-		puts "Tweets about Abby:"
+		puts "Tweets about you:"
 		puts mentions(client)
 	when 'fav'
-		puts "Abby's favorites:"
+		puts "Your favorites:"
 		puts favorites(client)
 	when 'other'
-		puts "Which Twitter user would you like to read about?"
+		puts "Which other Twitter user would you like to read about?"
 		answer = gets.chomp
 		puts other_user_info(answer)
 	when 'quit'
