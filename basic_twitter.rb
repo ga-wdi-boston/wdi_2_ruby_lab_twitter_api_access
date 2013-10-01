@@ -29,49 +29,27 @@ OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 # puts "6. Favorites"
 
 class TwitterClient
-  attr_accessor :client
+  attr_accessor :client, :username
   
-  def initialize(client)
-    @client = client
-  end
-
-  def interface
-    puts "What is your Twitter handle?"
-    twitter_handle = gets.chomp
-    puts "What information would you like about #{twitter_handle}?"
-    puts "1. Recent Tweets"
-    puts "2. Friend List"
-    puts "3. Followers"
-    puts "4. User Details"
-    puts "5. Lists"
-    puts "6. Favorites"
-    choice = gets.chomp.to_i
-  
-    case choice
-      when 1 then get_recent_tweets
-      when 2 then get_friend_list
-      when 3 then get_followers
-      when 4 then get_user_details
-      when 5 then get_lists
-      when 6 then get_favorites
-    end
-    choice
+  def initialize(client, username)
+    @client   = client
+    @username = username
   end
 
   def get_recent_tweets
     recent_tweets = []
-    client.user_timeline.each do |tweet|
+    @client.user_timeline(@@twitter_handle).each do |tweet|
       recent_tweets << tweet[:text]
     end
     recent_tweets
   end
 
-  def get_friend_list
+  def get_friends
   end
 
   def get_followers
     followers = {}
-    client.followers.each do |follower|
+    @client.followers(@@twitter_handle).each do |follower|
       followers[follower[:screen_name]] = follower[:name]
     end
     followers
@@ -81,10 +59,16 @@ class TwitterClient
 
   end
 
-  def get_lists
+  def get_retweets
+    retweets = {}
   end
 
   def get_favorites
+    favorites = {}
+    @client.favorites(@@twitter_handle).each do |favorite|
+      favorites[favorite[:user][:screen_name]] = favorite[:text]
+    end
+    favorites
   end
 end
 twitsy = TwitterClient.new(client)
