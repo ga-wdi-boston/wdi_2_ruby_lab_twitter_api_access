@@ -51,7 +51,7 @@ handle = gets.chomp
 puts "Do you want Recent Tweets, Following List, User Details or Lists?"
 response = gets.chomp
 
-# Response logic. 
+# Response logic. Includes error handling for invalid user for User Details.
 if response == "Recent Tweets"
 	recent_tweets(handle, client)
 elsif response == "Following List"
