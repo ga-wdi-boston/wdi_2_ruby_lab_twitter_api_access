@@ -36,7 +36,7 @@ case request
 
 binding.pry
 
- 	when"friends_list"
+ 	when "friends_list"
  	puts client.friends.all(username)
 
   when "user_followers"
