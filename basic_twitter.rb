@@ -52,6 +52,7 @@ class TwitterClient
     @client.user(@username).followers_count
   end
 
+  # Still looking for correct syntax
   def get_retweets
     retweets = {}
     @client.retweets(@username).each do |retweet|
