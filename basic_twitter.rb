@@ -2,8 +2,8 @@ require 'twitter'
 require 'pry'
 require 'dotenv'
 require_relative 'twitter_config'
-puts "What username would you like to find information on?"
 
+puts "What username would you like to find information on?"
 
 username = gets.chomp.to_s
 
@@ -34,6 +34,11 @@ elsif input == "fav_tweets"
   @client.favourites(username).each do |favourite|
     puts favourite[:text]
   end
-else 
+elsif input == "stream"
+  topics = "#{username}"
+  @streaming_client.filter(:track => topics) do |tweet|
+  puts tweet.text 
+  end
+else
   puts "incorrect input please try again"
 end
