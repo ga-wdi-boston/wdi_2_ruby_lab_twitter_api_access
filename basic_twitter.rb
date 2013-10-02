@@ -10,6 +10,13 @@ client = Twitter::REST::Client.new do |config|
   config.access_token_secret = ENV["ACCESS_SECRET"]
 end
 
+streaming_client = Twitter::Streaming::Client.new do |config|
+  config.consumer_key        = ENV["CONSUMER_KEY"]
+  config.consumer_secret     = ENV["CONSUMER_SECRET"]
+  config.access_token        = ENV["ACCESS_TOKEN"]
+  config.access_token_secret = ENV["ACCESS_SECRET"]
+end
+
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
 class TwitterClient
@@ -68,8 +75,13 @@ class TwitterClient
     end
     favorites
   end
+
+  def random_sample_stream
+    @client.sample { |tweet| tweet.text }
+  end
 end
-twitsy = TwitterClient.new(client, gets.chomp)
+#twitsy = TwitterClient.new(client, gets.chomp)
+twitsy_live = TwitterClient.new(streaming_client, gets.chomp)
 binding.pry
 # puts twitsy.get_name
 # puts twitsy.get_recent_tweets
