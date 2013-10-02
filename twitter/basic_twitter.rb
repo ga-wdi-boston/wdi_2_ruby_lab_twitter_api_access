@@ -5,15 +5,55 @@ require 'dotenv'
 
 Dotenv.load
 
+# client = Twitter::Streaming::Client.new do |config|
+#   config.consumer_key        = ENV["CONSUMER_KEY"]
+#   config.consumer_secret     = ENV["CONSUMER_SECRET"]
+#   config.access_token        = ENV["ACCESS_TOKEN"]
+#   config.access_token_secret = ENV["ACCESS_SECRET"]
+# end
+
+# topic = "obama"
+# obama_tweets = []
+# i = 0
+
+# client.filter(track: topic) do |tweet|
+# 	if tweet.lang == 'en'
+# 		i += 1
+# 		obama_tweets << {username: tweet.attrs[:user][:screen_name], tweet: tweet.text}
+# 		puts "#{i} tweets gathered"
+# 	end
+# 	break if i >= 50
+# end
+
+# words = []
+# obama_tweets.each do |item|
+# 	words << item[:tweet].split(" ")
+# end
+
+# words.flatten!
+# words.sort!
+# new_words = words.map { |word| word.downcase }
+
+# binding.pry
+
+# histogram = Hash.new(0)
+# new_words.each do |word|
+# 	histogram[word.to_sym] += 1
+# end
+
+# histogram.sort_by |key, value|
+# 	value
+# end
+
+# puts histogram
+
+
 client = Twitter::REST::Client.new do |config|
   config.consumer_key        = ENV["CONSUMER_KEY"]
   config.consumer_secret     = ENV["CONSUMER_SECRET"]
   config.access_token        = ENV["ACCESS_TOKEN"]
   config.access_token_secret = ENV["ACCESS_SECRET"]
 end
-
-
-binding.pry
 
 def stream(client, topic)
 	  client = Twitter::Streaming::Client.new do |config|
@@ -23,16 +63,15 @@ def stream(client, topic)
 	  config.access_token_secret = ENV["ACCESS_SECRET"]
 	end
 	topics = [topic]
-	client.filter(:track => topics.join(",")) { |tweet| puts tweet.text }
+	client.filter(:track => topics.join(",")) do |tweet| 
+		if tweet.lang == 'en'
+			puts tweet.text
+		end
+	end
 end
 
-def read_statuses(client)
-	arr = []
-	client.user.status.each do |status|
-		arr << "#{status.attrs[:text]}"
-		arr << ""
-	end
-	return arr
+def recent_tweet(client)
+	client.user.tweet.attrs[:text]
 end
 
 def tweet(client, text)
@@ -87,7 +126,7 @@ while answer
 
 puts
 puts "Welcome to your Terminal Twitter page.  What would you like to see?"
-puts "[Write] a new Tweet, Read your own [statuses], [Stream] Tweets, [Read] Twitter Feed, [User] Details, [Status], [Friends] List, [Lists], [Mentions], [Fav]orited Tweets, Read About [Other] Users, [Quit]"
+puts "[Write] a New Tweet, Read Your Most [Recent] Tweet, [Stream] Tweets, [Read] Twitter Feed, [User] Details, [Status], [Friends] List, [Lists], [Mentions], [Fav]orited Tweets, Read About [Other] Users, [Quit]"
 answer = gets.chomp
 answer.downcase!
 
@@ -99,8 +138,8 @@ answer.downcase!
 		  tweet(client, text)
 		end
 		puts "success!"
-	when 'statuses'
-		puts read_statuses(client)
+	when 'recent'
+		puts recent_tweet(client)
 	when 'stream'
 		puts "What topics do you want to read about?"
 		topic = gets.chomp
