@@ -1,5 +1,3 @@
-class.rb
-
 class Client
 	attr_accessor :client
 
@@ -11,7 +9,7 @@ class Client
 
 	def recent_tweets
 		recent_tweets = []
- 		@client.user_timeline.each do |tweet|
+ 		@client.user_timeline(username).each do |tweet|
 		recent_tweets << tweet.text
 			end
 	end
@@ -25,6 +23,10 @@ class Client
   		end
   	end
 
+	def user_description
+  		@client.user(username).description
+  	end
+
   	def client_lists
   		@client.lists(username) do |list|
 		x = list.text
@@ -32,8 +34,7 @@ class Client
 		end
   	end
 
-  	def user_description
-  		@client.user(username).description
+  	def favorite_tweets
   	end
 
   	def friends_list
@@ -43,6 +44,20 @@ class Client
 		friends_list
 		end
   	end
+  end
 
+  	# def filter_by_topic(topic)
+	# 	topic = []
+	# 	returned_tweets = []
+	# 	i = 0
 
-end
+	# 	client.filter(track: topic) do |tweet|
+	# 	if tweet.lang == 'en'
+	# 	i += 1
+	# 	returned_tweets << {username: tweet.attrs[:user][:screen_name],
+	# 			tweet: tweet.text}
+	# 	puts "#{i} tweets gathered"
+	# 	end
+	# 	break if i > 200
+	# 	end
+	# end
